@@ -186,7 +186,10 @@ PRODUCT_PACKAGES += \
     memtrack.msm8953 \
     vendor.qti.hardware.display.allocator-service \
     vendor.display.config@1.0.vendor \
-    vendor.qti.hardware.display.mapper@2.0.vendor
+    vendor.qti.hardware.display.mapper@2.0.vendor \
+    vendor.qti.hardware.display.mapper@3.0.vendor \
+    vendor.qti.hardware.display.mapper@4.0.vendor \
+    vendor.qti.hardware.display.mapperextensions@1.1.vendor
 
 # Device-specific settings
 PRODUCT_PACKAGES += \
