@@ -1,6 +1,10 @@
 /*
  * Copyright (c) 2013-2021, The Linux Foundation. All rights reserved.
  *
+ * Changes from Qualcomm Innovation Center are provided under the following license:
+ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
  * met:
@@ -788,6 +792,9 @@ static void update_hardware_info_bear(struct hardware_info *hw_info, const char 
     } else if (!strncmp(snd_card_name, "sm6150-idp-snd-card",
                  sizeof("sm6150-idp-snd-card"))) {
         strlcpy(hw_info->name, "sm6150", sizeof(hw_info->name));
+    } else if (!strncmp(snd_card_name, "sm6150-ipc-snd-card",
+                 sizeof("sm6150-ipc-snd-card"))) {
+        strlcpy(hw_info->name, "sm6150", sizeof(hw_info->name));
     } else if (!strncmp(snd_card_name, "sm6150-wcd9375-snd-card",
                  sizeof("sm6150-wcd9375-snd-card"))) {
         strlcpy(hw_info->name, "sm6150", sizeof(hw_info->name));
@@ -849,6 +856,20 @@ static void update_hardware_info_sdm439(struct hardware_info *hw_info, const cha
         strlcpy(hw_info->name, "sdm429w", sizeof(hw_info->name));
     } else {
         ALOGW("%s: Not an SDM439 device", __func__);
+    }
+}
+
+static void update_hardware_info_msm8917(struct hardware_info *hw_info, const char *snd_card_name)
+{
+	if (!strcmp(snd_card_name, "msm8917-sku5-snd-card")) {
+		strlcpy(hw_info->name, "msm8917", sizeof(hw_info->name));
+	}
+}
+
+static void update_hardware_info_msm8920(struct hardware_info *hw_info, const char *snd_card_name)
+{
+    if (!strcmp(snd_card_name, "msm8920-sku7-snd-card")) {
+        strlcpy(hw_info->name, "msm8920", sizeof(hw_info->name));
     }
 }
 
@@ -959,7 +980,7 @@ void *hw_info_init(const char *snd_card_name)
         ALOGV("SDX - variant soundcard");
         update_hardware_info_sdx(hw_info, snd_card_name);
     } else if (strstr(snd_card_name, "pahu") || strstr(snd_card_name, "tavil") ||
-            strstr(snd_card_name, "sa8155")) {
+            strstr(snd_card_name, "sa8155") || strstr(snd_card_name, "sa8295")) {
         ALOGV("MSMNILE - variant soundcard");
         update_hardware_info_msmnile(hw_info, snd_card_name);
     } else if (strstr(snd_card_name, "sda845")) {
@@ -979,6 +1000,12 @@ void *hw_info_init(const char *snd_card_name)
     } else if(strstr(snd_card_name, "sdm439") || strstr(snd_card_name, "sdm429w")) {
         ALOGV("SDM439 - variant soundcard");
         update_hardware_info_sdm439(hw_info, snd_card_name);
+    } else if (strstr(snd_card_name, "msm8917")) {
+        ALOGV("MSM8917 - variant soundcard");
+        update_hardware_info_msm8917(hw_info, snd_card_name);
+    } else if (strstr(snd_card_name, "msm8920")) {
+        ALOGV("MSM8920 - variant soundcard");
+        update_hardware_info_msm8920(hw_info, snd_card_name);
     } else if (strstr(snd_card_name, "msm8937")) {
         ALOGV("MSM8937 - variant soundcard");
         update_hardware_info_msm8937(hw_info, snd_card_name);
@@ -1001,7 +1028,7 @@ void hw_info_deinit(void *hw_info)
 {
     struct hardware_info *my_data = (struct hardware_info*) hw_info;
 
-    if(!my_data)
+    if (my_data)
         free(my_data);
 }
 
